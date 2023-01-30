@@ -1,5 +1,5 @@
 # from collections import OrderedDict
-
+import cx_Oracle
 from django.db import connection
 # from django.shortcuts import render
 from rest_framework.views import APIView
@@ -35,7 +35,7 @@ class SelectListView(APIView):
 
     def post(self, request):
         cursor = connection.cursor()
-        code_shop = cursor.var(int)
-        cursor.callproc('MZ.REF_DISTRICT_EDIT.EdDistrictItm', [code_shop, request.data['name_district'], request.data['description']])
+        rout = cursor.var(cx_Oracle.NUMBER).var  # это для выходного параметра в процедуре
+        code_shop = cursor.callfunc('mz.SumPaySupplyWithRet', int, [request.data['code_shop'], rout])
         connection.commit()
-        return Response({"code": code_shop})
+        return Response({"code": code_shop, "out": rout.getvalue()})
