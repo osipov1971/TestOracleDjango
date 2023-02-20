@@ -1,0 +1,5 @@
+
+*.pyc
+SelectExec/__pycache__/*.*
+SelectExec/migrations/__pycache__/*.*
+TestOracle/__pycache__/*.*
